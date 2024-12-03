@@ -1,3 +1,4 @@
+USE `SalesDB`;
 -- Update Inventory after purchase
 delimiter |
 CREATE TRIGGER IF NOT EXISTS purchaseInsert AFTER INSERT ON PurchaseTransactions
