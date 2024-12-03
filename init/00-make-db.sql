@@ -114,11 +114,6 @@ CREATE TABLE IF NOT EXISTS `SalesDB`.`SalesTransactionDetails` (
   `Transaction_Time` DATETIME NOT NULL,
   PRIMARY KEY (`Transaction_ID`),
   INDEX `fk_SalesTransactionDetails_Customers1_idx` (`Customer_ID` ASC) VISIBLE,
-  CONSTRAINT `fk_SalesTransactionDetails_SalesTransactions1`
-    FOREIGN KEY (`Transaction_ID`)
-    REFERENCES `SalesDB`.`SalesTransactions` (`Transaction_ID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
   CONSTRAINT `fk_SalesTransactionDetails_Customers1`
     FOREIGN KEY (`Customer_ID`)
     REFERENCES `SalesDB`.`Customers` (`Customer_ID`)
@@ -147,11 +142,6 @@ CREATE TABLE IF NOT EXISTS `SalesDB`.`PurchaseTransactionDetails` (
   `Transaction_Time` DATETIME NOT NULL,
   PRIMARY KEY (`Transaction_ID`),
   INDEX `fk_PurchaseTransactionDetails_Vendors1_idx` (`Vendor_ID` ASC) VISIBLE,
-  CONSTRAINT `fk_PurchaseTransactionDetails_PurchaseTransactions1`
-    FOREIGN KEY (`Transaction_ID`)
-    REFERENCES `SalesDB`.`PurchaseTransactions` (`Transaction_ID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
   CONSTRAINT `fk_PurchaseTransactionDetails_Vendors1`
     FOREIGN KEY (`Vendor_ID`)
     REFERENCES `SalesDB`.`Vendors` (`Vendor_ID`)
