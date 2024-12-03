@@ -19,6 +19,7 @@ USE `SalesDB` ;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `SalesDB`.`Products` (
   `SKU` INT NOT NULL AUTO_INCREMENT,
+  `aggregate_id` INT,
   `Name` VARCHAR(256) NOT NULL,
   `Properties` JSON NULL,
   PRIMARY KEY (`SKU`))
