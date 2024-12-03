@@ -44,12 +44,26 @@ TODO
 ```
 
 ## Executing Queries
-### Finding the best selling products:
-```
-TODO
-```
+- See `queries.sql` for details
 
 ## Test Cases
-### Data Integrity
-### Transaction Behavior
+- See `database_test.md` for details
 
+## Backup & Recovery
+- Performed with mysqldump command
+- To back up directly from the docker image:
+  - This will create a `dump.sql` file in the current directory
+```
+docker exec -i salesdb mysqldump -uroot -proot --databases SalesDB --skip-comments > ./dump.sql
+```
+- Preferred way of recovery: rebuild the docker image
+  1. Remove the files in /init folder and replace with `dump.sql`
+  2. Remove the created volumes and images in docker
+  3. Call the 3 steps in initial setup to rebuild and docker image and recreate the container
+
+- Alternative way of recovery: importing the dumpfile through docker CLI
+  - Make sure that `dump.sql` is in the current directory
+  - May lead to errors suck as `socket.error: [Errno 32] Broken pipe` and `ValueError: file descriptor cannot be a negative integer (-1)`
+```
+docker exec salesdb /bin/bash -c 'mysql -uroot -proot < ./dump.sql'
+```
