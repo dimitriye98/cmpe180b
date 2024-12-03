@@ -19,7 +19,7 @@ USE `SalesDB` ;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `SalesDB`.`Products` (
   `SKU` INT NOT NULL AUTO_INCREMENT,
-  `Name` VARCHAR(45) NOT NULL,
+  `Name` VARCHAR(256) NOT NULL,
   `Properties` JSON NULL,
   PRIMARY KEY (`SKU`))
 ENGINE = InnoDB;
