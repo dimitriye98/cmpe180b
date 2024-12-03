@@ -18,7 +18,7 @@ USE `SalesDB` ;
 -- Table `SalesDB`.`Products`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `SalesDB`.`Products` (
-  `SKU` INT NOT NULL,
+  `SKU` INT NOT NULL AUTO_INCREMENT,
   `Name` VARCHAR(45) NOT NULL,
   `Properties` JSON NULL,
   PRIMARY KEY (`SKU`))
