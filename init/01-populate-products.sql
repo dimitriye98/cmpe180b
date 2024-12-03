@@ -1794,4 +1794,4 @@ INSERT INTO Products (name, aggregate_id, properties) VALUES
 ('Majesty High-Rise Raw Denim Selvedge Premium Jeans', '70', '{"manufacturer":"Cromwell & Fitzgerald", "category":"Clothing", "size":"42x30"}'),
 ('Majesty High-Rise Raw Denim Selvedge Premium Jeans', '70', '{"manufacturer":"Cromwell & Fitzgerald", "category":"Clothing", "size":"42x32"}'),
 ('Majesty High-Rise Raw Denim Selvedge Premium Jeans', '70', '{"manufacturer":"Cromwell & Fitzgerald", "category":"Clothing", "size":"42x34"}'),
-('Majesty High-Rise Raw Denim Selvedge Premium Jeans', '70', '{"manufacturer":"Cromwell & Fitzgerald", "category":"Clothing", "size":"42x36"}'),
+('Majesty High-Rise Raw Denim Selvedge Premium Jeans', '70', '{"manufacturer":"Cromwell & Fitzgerald", "category":"Clothing", "size":"42x36"}');
