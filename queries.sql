@@ -72,3 +72,32 @@ JOIN
     `SalesDB`.`SalesTransactionDetails` std ON st.Transaction_ID = std.Transaction_ID
 WHERE 
     std.Transaction_Time >= NOW() - INTERVAL 1 MONTH;
+
+
+-- 5. Product search by properties and manufacturer
+-- Create columns manufacturer and category
+ALTER TABLE `SalesDB`.`Products`
+ADD COLUMN manufacturer VARCHAR(255),
+ADD COLUMN category VARCHAR(255);
+
+-- Update new columns with data
+UPDATE `SalesDB`.`Products`
+SET 
+    manufacturer = JSON_UNQUOTE(JSON_EXTRACT(Properties, '$.manufacturer')),
+    category = JSON_UNQUOTE(JSON_EXTRACT(Properties, '$.category'));
+
+-- Create Full-Text Index on the New Columns
+CREATE FULLTEXT INDEX idx_fulltext_product_search ON `SalesDB`.`Products` (Name, manufacturer, category);
+-- Search by properties and manufacturer
+SELECT 
+    p.SKU,
+    p.Name,
+    p.manufacturer,
+    p.category,
+    p.Properties
+FROM 
+    `SalesDB`.`Products` p
+WHERE 
+    JSON_UNQUOTE(JSON_EXTRACT(p.Properties, '$.manufacturer')) = 'ZenTech'
+    AND CAST(JSON_UNQUOTE(JSON_EXTRACT(p.Properties, '$.cores')) AS UNSIGNED) >= 4;
+
