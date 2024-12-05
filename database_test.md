@@ -99,6 +99,9 @@ from Products
 where Name like "%Classic%";
 ```
 
+### Other complex queries
+- See `queries.md` for key queries
+
 
 ## TRANSACTIONS
 - Test case: inserting customers with the same ID twice, and then rolling back the entire transaction
