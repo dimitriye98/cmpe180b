@@ -67,6 +67,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `SalesDB`.`Inventories` (
   `SKU` INT NOT NULL,
   `Volume` INT NOT NULL,
+  CHECK (Volume > 0),
   PRIMARY KEY (`SKU`),
   CONSTRAINT `fk_Inventory_Products1`
     FOREIGN KEY (`SKU`)
