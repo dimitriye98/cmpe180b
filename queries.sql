@@ -1,6 +1,7 @@
 -- 1. Best-Selling Products
 -- Creating index on SKU in SalesTransactions table for faster retrieval
-CREATE INDEX idx_sku_sales_transactions ON `SalesDB`.`SalesTransactions` (SKU);
+-- SKIPPED AS JOINING ON PRIMARY KEYS
+-- CREATE INDEX idx_sku_sales_transactions ON `SalesDB`.`SalesTransactions` (SKU);
 
 -- Query to retrieve the top 10 best-selling products
 SELECT 
@@ -41,8 +42,9 @@ WHERE
 
 -- 3. Product Inventory Levels
 -- Index on SKU columns
-CREATE INDEX idx_inventories_sku ON `SalesDB`.`Inventories`(SKU);
-CREATE INDEX idx_products_sku ON `SalesDB`.`Products`(SKU);
+-- SKIPPED AS PRIMARY KEYS ARE AUTOMATICALLY INDEXED
+-- CREATE INDEX idx_inventories_sku ON `SalesDB`.`Inventories`(SKU);
+-- CREATE INDEX idx_products_sku ON `SalesDB`.`Products`(SKU);
 
 -- Query to retrieve current stock levels and check for low inventory
 SELECT 
@@ -56,12 +58,13 @@ SELECT
 FROM 
     `SalesDB`.`Inventories` i
 JOIN 
-    `SalesDB`.`Products` p ON i.SKU = p.SKU;
+    `SalesDB`.`Products` p ON i.SKU = p.SKU
+ORDER BY Stock_Status ASC, SKU ASC;
 
 
 -- 4. Average Order Value (AOV) Calculation
 -- Create index on Transaction_Time in SalesTransactionDetails
-CREATE INDEX idx_transaction_time_sales_transaction_details ON `SalesDB`.`SalesTransactionDetails` (Transaction_Time);
+-- CREATE INDEX idx_transaction_time_sales_transaction_details ON `SalesDB`.`SalesTransactionDetails` (Transaction_Time);
 
 -- Query to calculate the Average Order Value (AOV) for the past month
 SELECT 
@@ -77,17 +80,20 @@ WHERE
 -- 5. Product search by properties and manufacturer
 -- Create columns manufacturer and category
 ALTER TABLE `SalesDB`.`Products`
-ADD COLUMN manufacturer VARCHAR(255),
-ADD COLUMN category VARCHAR(255);
+ADD COLUMN manufacturer VARCHAR(255) AS (Properties->>'$.manufacturer') STORED,
+ADD COLUMN category VARCHAR(255) AS (Properties->> '$.category') STORED;
 
 -- Update new columns with data
-UPDATE `SalesDB`.`Products`
-SET 
-    manufacturer = JSON_UNQUOTE(JSON_EXTRACT(Properties, '$.manufacturer')),
-    category = JSON_UNQUOTE(JSON_EXTRACT(Properties, '$.category'));
+-- OMITTED AS STORED GENERATED COLUMNS ARE USED
+-- UPDATE `SalesDB`.`Products`
+-- SET 
+--     manufacturer = JSON_UNQUOTE(JSON_EXTRACT(Properties, '$.manufacturer')),
+--     category = JSON_UNQUOTE(JSON_EXTRACT(Properties, '$.category'));
 
 -- Create Full-Text Index on the New Columns
-CREATE FULLTEXT INDEX idx_fulltext_product_search ON `SalesDB`.`Products` (Name, manufacturer, category);
+CREATE INDEX idx_product_manufacturer_search ON `SalesDB`.`Products` (manufacturer);
+CREATE INDEX idx_product_category_search ON `SalesDB`.`Products` (category);
+CREATE INDEX idx_product_name_search ON `SalesDB`.`Products` (Name);
 -- Search by properties and manufacturer
 SELECT 
     p.SKU,
@@ -98,6 +104,6 @@ SELECT
 FROM 
     `SalesDB`.`Products` p
 WHERE 
-    JSON_UNQUOTE(JSON_EXTRACT(p.Properties, '$.manufacturer')) = 'ZenTech'
+    manufacturer = 'ZenTech'
     AND CAST(JSON_UNQUOTE(JSON_EXTRACT(p.Properties, '$.cores')) AS UNSIGNED) >= 4;
 
