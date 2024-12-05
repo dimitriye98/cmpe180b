@@ -17,7 +17,7 @@ ORDER BY
     Total_Units_Sold DESC
 LIMIT 10;
 ```
-2. Find the customer order history
+2. Retrieving the customer order history
    - Find all previous orders made by a customer
    - If the index was already created in `Readme.md`, skip the first command and use the `SELECT` command only
    - In this example, the order history for customer with ID 1026 is found.
@@ -45,7 +45,7 @@ WHERE
     c.Customer_ID = 1026;  -- Replace '1026' with the specific customer ID
 ```
 
-1. Checking for low stock items
+3. Checking for low stock items
    - This will return the inventory stock level of every product
    - If a product has less than 10 items available, it will be labeled as such, and be placed at the top of the returned results
    - Otherwise, all products are sorted based on their SKU
@@ -66,7 +66,7 @@ JOIN
 ORDER BY Stock_Status ASC, SKU ASC;
 ```
 
-1. Finding the average order value
+4. Finding the average order value
     - Find the average order value for all products sold in the past month
 ```SQL
 -- Query to calculate the Average Order Value (AOV) for the past month
@@ -80,7 +80,7 @@ WHERE
     std.Transaction_Time >= NOW() - INTERVAL 1 MONTH;
 ```
 
-1. Searching products by properties and manufacturer
+5. Searching products by properties and manufacturer
 - Filters the products based on a given condition
 - In this example, the products are filtered based on the manufacturer name "ZenTech" (which only produces CPUs), and for CPU Products with at least 4 Cores.
 - If the generated columns and indices were already created in `Readme.md`, then skip to only running the `SELECT` command at the end.
