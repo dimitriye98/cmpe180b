@@ -5,7 +5,7 @@
   - Currently, the databse is populated with electronics and clothings
 - The database allows for analytical tasks such as finding the best-selling products, tracking customer order history, and more.
 - Developed for SJSU CMPE 180B semester project.
-- Note: all commands should be run from the root directory of the project.
+- Note: all commands should be run in a shell from the root directory of the project except for SQL statements, which should be done in the MySQL console
 ## Project Setup
 ### Initial setup:
 - Install docker on the machine
@@ -82,6 +82,16 @@ TODO
 
 ## Test Cases
 - See `database_test.md` for details
+
+## Isolation & Concurrency control
+- The database uses MySQL InnoDB's default isolation level of REPEATABLE READ
+  - This isolation level prevents dirty read and non-repeatable reads
+- For changes made to purchase and sales transaction logs, lock the affected rows in the Inventories table to prevent lost updates to the inventory stock
+```SQL
+-- SQL COMMAND, run in a SQL console in a transaction before changing purchases/sales transaction tables
+SELECT * FROM Inventories WHERE SKU = 1 FOR UPDATE;
+```
+- MySQL automatically handles blocks and deadlocks by rolling back transactions to resolve them
 
 ## Backup & Recovery
 - Performed with mysqldump command
