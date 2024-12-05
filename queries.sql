@@ -90,7 +90,7 @@ ADD COLUMN category VARCHAR(255) AS (Properties->> '$.category') STORED;
 --     manufacturer = JSON_UNQUOTE(JSON_EXTRACT(Properties, '$.manufacturer')),
 --     category = JSON_UNQUOTE(JSON_EXTRACT(Properties, '$.category'));
 
--- Create Full-Text Index on the New Columns
+-- Create Index on the Manufacturer, Category, and Name
 CREATE INDEX idx_product_manufacturer_search ON `SalesDB`.`Products` (manufacturer);
 CREATE INDEX idx_product_category_search ON `SalesDB`.`Products` (category);
 CREATE INDEX idx_product_name_search ON `SalesDB`.`Products` (Name);
