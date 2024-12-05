@@ -113,3 +113,47 @@ VALUES (60000, "Duplicate Customer", "Test Address");
 -- Rolling back transaction
 ROLLBACK;
 ```
+
+- Test case: performing 2 transactions on the same product
+  - T1 is executed
+    - it locks the row in Inventories for update
+    - it also performs an insert statement in SalesTransactions
+  - T2 is executed
+    - it attempts to lock the same row in the Inventories table, but is blocked
+  - T3 is executed
+    - it locks a different row in Inventory for update
+    - it also performs an insert statement in SalesTransactions
+- Expected: 
+  - T1 can continue without issue
+  - T2 is blocked until T1 commits or rollsback, or it is timed out by the database.
+  - T3 can continue without issue
+```SQL
+--TRANSACTION T1
+BEGIN;
+-- Lock the row so that no other transactions can make changes
+SELECT * FROM Inventories WHERE SKU = 1 FOR UPDATE;
+INSERT INTO SalesTransactions VALUES 
+(5000, 1, 10, 50.00);
+-- Wait and execute T2
+```
+
+```SQL
+-- TRANSACTION T2
+BEGIN;
+-- Attempting to lock the same row in the transaction
+-- Should be blocked until T1 commits or rolls back
+SELECT * FROM Inventories WHERE SKU = 1 FOR UPDATE;
+INSERT INTO PurchaseTransactions(Transaction_ID, SKU, Volume, Unit_price)
+VALUES (5001, 2, 15, 50.00);
+ROLLBACK;
+```
+
+```SQL
+--TRANSACTION T3
+BEGIN;
+-- Lock the row so that no other transactions can make changes
+-- Should be able to continue without issue
+SELECT * FROM Inventories WHERE SKU = 2 FOR UPDATE;
+INSERT INTO SalesTransactions(Transaction_ID, SKU, Volume, Unit_price)
+VALUES (5002, 2, 10, 50.00);
+```

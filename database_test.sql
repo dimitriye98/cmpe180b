@@ -67,6 +67,8 @@ where Name like "%Classic%";
 
 -- TRANSACTIONS
 
+-- Transaction breaking unique constraint
+-- Expect the changes to be rolled back; no change reflected in the database
 START TRANSACTION;
 INSERT INTO Customers (Customer_ID, Name, Address)
 VALUES (60000, "Good Customer", "Test Address");
@@ -77,3 +79,30 @@ VALUES (60000, "Duplicate Customer", "Test Address");
 ROLLBACK;
 
 COMMIT;
+
+-- Concurrency check: 2 Transactions on the same product
+-- Expect T2 to be blocked until T1 commits or rolls back.
+
+--TRANSACTION T1
+BEGIN;
+-- Lock the row so that no other transactions can make changes
+SELECT * FROM Inventories WHERE SKU = 1 FOR UPDATE;
+INSERT INTO SalesTransactions (Transaction_ID, SKU, Volume, Unit_price)
+VALUES (5000, 1, 10, 50.00);
+
+
+-- TRANSACTION T2
+BEGIN;
+-- Attempting to lock the same row in the transaction
+-- Should be blocked until T1 commits or rolls back
+SELECT * FROM Inventories WHERE SKU = 1 FOR UPDATE;
+INSERT INTO PurchaseTransactions(Transaction_ID, SKU, Volume, Unit_price)
+VALUES (5001, 1, 15, 50.00);
+
+--TRANSACTION T3
+BEGIN;
+-- Lock the row so that no other transactions can make changes
+-- Should be able to continue without issue
+SELECT * FROM Inventories WHERE SKU = 2 FOR UPDATE;
+INSERT INTO SalesTransactions(Transaction_ID, SKU, Volume, Unit_price)
+VALUES (5002, 2, 10, 50.00);
