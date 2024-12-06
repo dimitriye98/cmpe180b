@@ -131,7 +131,7 @@ ROLLBACK;
   - T2 is blocked until T1 commits or rollsback, or it is timed out by the database.
   - T3 can continue without issue
 ```SQL
---TRANSACTION T1
+-- TRANSACTION T1
 BEGIN;
 -- Lock the row so that no other transactions can make changes
 SELECT * FROM Inventories WHERE SKU = 1 FOR UPDATE;
@@ -147,12 +147,12 @@ BEGIN;
 -- Should be blocked until T1 commits or rolls back
 SELECT * FROM Inventories WHERE SKU = 1 FOR UPDATE;
 INSERT INTO PurchaseTransactions(Transaction_ID, SKU, Volume, Unit_price)
-VALUES (5001, 2, 15, 50.00);
+VALUES (5001, 1, 15, 50.00);
 ROLLBACK;
 ```
 
 ```SQL
---TRANSACTION T3
+-- TRANSACTION T3
 BEGIN;
 -- Lock the row so that no other transactions can make changes
 -- Should be able to continue without issue
