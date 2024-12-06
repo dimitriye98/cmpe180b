@@ -46,15 +46,17 @@ docker exec -i salesdb mysql -uroot -proot < ./init/04-populate-purchase-transac
 docker exec -i salesdb mysql -uroot -proot < ./init/04-populate-sale-transaction-detail.sql
 ```
 
-## Database Optimization
+## Database Optimization & Results
 ### Adding Indexes and Generated Columns
 - Most operations use PRIMARY index, which is automatically done by InnoDB
 - Indexes are created for 2 key queries:
   - Finding customer order history:
     - Index is placed on Customer_ID of SalesTransactionDetails table
+    - Through indexing, the number of rows queried is reduced from 182,422 to 2 rows in the example query
   - Filtering Products based on manufacturer, category, and name
     - Generated Columns are created for manufacturer and category
     - Indices are placed on manufacturer, category, and name of Products table
+    - Through indexing, the number of rows visited is reduced from 1774 to 6 in the example query
 ```SQL
 -- FOR CUSTOMER ORDER HISTORY
 -- Creating index on customer_id in SalesTransactionDetails for fast lookup
@@ -70,11 +72,6 @@ ADD COLUMN category VARCHAR(255) AS (Properties->> '$.category') STORED;
 CREATE INDEX idx_product_manufacturer_search ON `SalesDB`.`Products` (manufacturer);
 CREATE INDEX idx_product_category_search ON `SalesDB`.`Products` (category);
 CREATE INDEX idx_product_name_search ON `SalesDB`.`Products` (Name);
-```
-
-### Optimization results
-```
-TODO
 ```
 
 ## Executing Queries

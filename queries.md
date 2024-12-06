@@ -21,6 +21,7 @@ LIMIT 10;
    - Find all previous orders made by a customer
    - If the index was already created in `Readme.md`, skip the first command and use the `SELECT` command only
    - In this example, the order history for customer with ID 1026 is found.
+   - Through indexing, the number of rows queried is reduced from 182,422 to 2 rows
 ```SQL
 -- SKIP THIS IF ALREADY CREATED
 -- Creating index on customer_id in SalesTransactionDetails for fast lookup
@@ -84,6 +85,7 @@ WHERE
 - Filters the products based on a given condition
 - In this example, the products are filtered based on the manufacturer name "ZenTech" (which only produces CPUs), and for CPU Products with at least 4 Cores.
 - If the generated columns and indices were already created in `Readme.md`, then skip to only running the `SELECT` command at the end.
+- Through indexing, the number of rows visited is reduced from 1774 to 6.
 ```SQL
 -- SKIP THIS IF ALREADY CREATED
 -- Create stored generated columns manufacturer and category
